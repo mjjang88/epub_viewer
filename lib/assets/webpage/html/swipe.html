@@ -150,7 +150,17 @@
 
           if (el) {
             // console.log('EPUB_TEST_HOOK_IF')
-            detectSwipe(el, function(el,direction){
+            detectClickSides(el, function(el,direction){
+              // console.log("EPUB_TEST_DIR"+direction.toString())
+
+                if(direction == 'prev'){
+                  rendition.prev()
+                }
+                if(direction== 'next'){
+                  rendition.next()
+                }
+              });
+            <!--detectSwipe(el, function(el,direction){
               // console.log("EPUB_TEST_DIR"+direction.toString())
 
                 if(direction == 'l'){
@@ -159,7 +169,7 @@
                 if(direction== 'r'){
                   rendition.prev()
                 }
-              });
+              });-->
           }
         }
         });
@@ -398,6 +408,20 @@
         }
         direc = "";
       },false);  
+    }
+
+    // 좌우 클릭 감지 함수
+    function detectClickSides(el, func) {
+      el.addEventListener('click', function(e) {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left; // 요소 내 x 위치
+        const width = rect.width;
+        if (x < width / 2) {
+          func(el, 'prev');
+        } else {
+          func(el, 'next');
+        }
+      });
     }
 
     
