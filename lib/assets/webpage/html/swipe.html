@@ -402,14 +402,13 @@
 
     // 좌우 클릭 감지 함수
     function detectClickSides(el, func) {
-      ele.addEventListener('touchend',function(e){
-        var t = e.touches[0];
-        if (window.innerWidth / 2 < t.screenX) {
-          func(el, 'next');
-        } else {
+      el.addEventListener('click', function(e) {
+        if (window.innerWidth / 2 < e.clientX) {
           func(el, 'prev');
+        } else {
+          func(el, 'next');
         }
-      },false);
+      });
     }
     
   </script>
