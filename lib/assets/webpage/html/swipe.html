@@ -403,7 +403,7 @@
     // 좌우 클릭 감지 함수
     function detectClickSides(el, func) {
       el.addEventListener('click', function(e) {
-        if (window.innerWidth / 2 < e.clientX) {
+        if (window.innerWidth / 2 > e.screenX) {
           func(el, 'prev');
         } else {
           func(el, 'next');
