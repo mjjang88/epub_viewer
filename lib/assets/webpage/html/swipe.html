@@ -404,10 +404,7 @@
     function detectClickSides(el, func) {
       ele.addEventListener('touchend',function(e){
         var t = e.touches[0];
-        t.screenX;
-        const viewer = document.getElementById("viewer");
-        const rect = viewer.getBoundingClientRect();
-        if (rect.width / 2 < t.screenX) {
+        if (window.innerWidth / 2 < t.screenX) {
           func(el, 'next');
         } else {
           func(el, 'prev');
