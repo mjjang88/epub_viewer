@@ -156,7 +156,7 @@
                 if(direction == 'prev'){
                   rendition.prev()
                 }
-                if(direction== 'next'){
+                if(direction == 'next'){
                   rendition.next()
                 }
               });
@@ -402,18 +402,18 @@
 
     // 좌우 클릭 감지 함수
     function detectClickSides(el, func) {
-      el.addEventListener('click', function(e) {
-        const rect = el.getBoundingClientRect();
-        const x = e.clientX - rect.left; // 요소 내 x 위치
-        const width = rect.width;
-        if (x < width / 2) {
-          func(el, 'prev');
-        } else {
+      ele.addEventListener('touchend',function(e){
+        var t = e.touches[0];
+        t.screenX;
+        const viewer = document.getElementById("viewer");
+        const rect = viewer.getBoundingClientRect();
+        if (rect.width / 2 < t.screenX) {
           func(el, 'next');
+        } else {
+          func(el, 'prev');
         }
-      });
+      },false);
     }
-
     
   </script>
 
