@@ -170,6 +170,7 @@ class _EpubViewerState extends State<EpubViewer> {
     var data = await widget.epubSource.epubData;
     final displaySettings = widget.displaySettings ?? EpubDisplaySettings();
     String manager = displaySettings.manager.name;
+    int fontSize = displaySettings.fontSize;
     String flow = displaySettings.flow.name;
     String spread = displaySettings.spread.name;
     bool snap = displaySettings.snap;
@@ -188,7 +189,7 @@ class _EpubViewerState extends State<EpubViewer> {
 
     webViewController?.evaluateJavascript(
         source:
-            'loadBook([${data.join(',')}], "$cfi", "$manager", "$flow", "$spread", $snap, $allowScripted, "$direction", $useCustomSwipe, "$backgroundColor", "$foregroundColor")');
+            'loadBook([${data.join(',')}], "$cfi", "$manager", "$flow", "$spread", $snap, $allowScripted, "$direction", $useCustomSwipe, "$backgroundColor", "$foregroundColor", "$fontSize")');
   }
 
   @override
