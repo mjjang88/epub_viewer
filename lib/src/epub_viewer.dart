@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter_epub_viewer/src/epub_controller.dart';
 import 'package:flutter_epub_viewer/src/helper.dart';
@@ -21,6 +22,7 @@ class EpubViewer extends StatefulWidget {
     this.displaySettings,
     this.selectionContextMenu,
     this.onAnnotationClicked,
+    this.onCenterClicked
   });
 
   ///Epub controller to manage epub
@@ -55,6 +57,9 @@ class EpubViewer extends StatefulWidget {
   ///context menu for text selection
   ///if null, the default context menu will be used
   final ContextMenu? selectionContextMenu;
+
+  /// center 영역을 클릭해서 메뉴를 띄우는 역할을 함.
+  final VoidCallback? onCenterClicked;
 
   @override
   State<EpubViewer> createState() => _EpubViewerState();
@@ -163,6 +168,12 @@ class _EpubViewerState extends State<EpubViewer> {
           var cfi = data[1];
           widget.epubController.pageTextCompleter
               .complete(EpubTextExtractRes(text: text, cfiRange: cfi));
+        });
+
+    webViewController?.addJavaScriptHandler(
+        handlerName: "centerClicked",
+        callback: (data) {
+          widget.onCenterClicked?.call();
         });
   }
 

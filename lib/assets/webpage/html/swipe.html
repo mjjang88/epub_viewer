@@ -159,6 +159,9 @@
                 if(direction == 'next'){
                   rendition.next()
                 }
+                if(direction == 'menu'){
+                  window.flutter_inappwebview.callHandler('centerClicked');
+                }
               });
           }
         }
@@ -407,10 +410,12 @@
     // 좌우 클릭 감지 함수
     function detectClickSides(el, func) {
       el.addEventListener('click', function(e) {
-        if (window.innerWidth / 2 > e.screenX) {
+        if (window.innerWidth / 3 > e.screenX) {
           func(el, 'prev');
-        } else {
+        } else if (window.innerWidth / 3 * 2 < e.screenX) {
           func(el, 'next');
+        } else {
+          func(el, 'menu');
         }
       });
     }
