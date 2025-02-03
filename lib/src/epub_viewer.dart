@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter_epub_viewer/src/epub_controller.dart';
 import 'package:flutter_epub_viewer/src/helper.dart';
