@@ -219,7 +219,7 @@ class _EpubViewerState extends State<EpubViewer> {
         webViewController = controller;
         widget.epubController.setWebViewController(controller);
         // await loadBook();
-        addJavaScriptHandlers();
+        //addJavaScriptHandlers();
       },
       onLoadStart: (controller, url) {},
       onPermissionRequest: (controller, request) async {
@@ -244,7 +244,9 @@ class _EpubViewerState extends State<EpubViewer> {
 
         return NavigationActionPolicy.ALLOW;
       },
-      onLoadStop: (controller, url) async {},
+      onLoadStop: (controller, url) async {
+        addJavaScriptHandlers();
+      },
       onReceivedError: (controller, request, error) {},
 
       onProgressChanged: (controller, progress) {},
