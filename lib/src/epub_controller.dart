@@ -63,7 +63,14 @@ class EpubController {
     final result =
         await webViewController!.evaluateJavascript(source: 'getChapters()');
     _chapters =
-        List<EpubChapter>.from(result.map((e) => EpubChapter.fromJson(e)));
+        List<EpubChapter>.from(result.map((e) {
+          if (e is Map<Object?, Object?>) {
+            Map<String, dynamic> parsedData = convertToMap(e);
+            return EpubChapter.fromJson(parsedData);
+          } else {
+            return EpubChapter.fromJson(e);
+          }
+        }));
     return _chapters;
   }
 
@@ -195,6 +202,10 @@ class EpubController {
       throw Exception(
           "Epub viewer is not loaded, wait for onEpubLoaded callback");
     }
+  }
+
+  Map<String, dynamic> convertToMap(Map<Object?, Object?> data) {
+    return data.map((key, value) => MapEntry(key.toString(), value));
   }
 }
 
