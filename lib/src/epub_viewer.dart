@@ -225,7 +225,11 @@ class _EpubViewerState extends State<EpubViewer> {
       //         'http://localhost:8080/html/swipe.html?cfi=${widget.initialCfi ?? ''}&displaySettings=$displaySettings')),
       initialSettings: settings
         ..disableVerticalScroll = widget.displaySettings?.snap ?? false
-        ..allowingReadAccessTo = WebUri.uri(Uri.parse("file:///")),
+        ..allowingReadAccessTo = WebUri.uri(Uri.parse("file:///"))
+        ..allowFileAccess = true
+        ..allowContentAccess = true
+        ..allowsInlineMediaPlayback = true,
+
       // pullToRefreshController: pullToRefreshController,
       onWebViewCreated: (controller) async {
         webViewController = controller;
