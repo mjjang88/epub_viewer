@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_epub_viewer/src/utils.dart';
+import 'package:path_provider/path_provider.dart';
 
 class EpubViewer extends StatefulWidget {
   const EpubViewer({
@@ -197,9 +198,19 @@ class _EpubViewerState extends State<EpubViewer> {
     String? foregroundColor =
         widget.displaySettings?.theme?.foregroundColor?.toHex();
 
+    final path = await saveEpubToAppStorage(data, 'book.epub');
+
     webViewController?.evaluateJavascript(
         source:
-            'loadBook([${data.join(',')}], "$cfi", "$manager", "$flow", "$spread", $snap, $allowScripted, "$direction", $useCustomSwipe, "$backgroundColor", "$foregroundColor", "$fontSize")');
+            'loadBook("$path", "$cfi", "$manager", "$flow", "$spread", $snap, $allowScripted, "$direction", $useCustomSwipe, "$backgroundColor", "$foregroundColor", "$fontSize")');
+  }
+
+  Future<String> saveEpubToAppStorage(Uint8List epubData, String fileName) async {
+    final directory = await getApplicationDocumentsDirectory(); // ✅ 앱 전용 저장소
+    final filePath = "${directory!.path}/$fileName";
+    final file = File(filePath);
+    await file.writeAsBytes(epubData);
+    return filePath; // ✅ WebView에서 접근 가능
   }
 
   @override
