@@ -124,8 +124,6 @@
                 safeCallHandler('displayError', error.message);
             });
 
-            window.flutter_inappwebview.callHandler('chapters');
-
             // 이벤트 리스너 등록
             addEventListeners();
             applyStyles();
@@ -133,6 +131,11 @@
 
         function addEventListeners() {
             console.log("Adding event listeners...");
+
+            book.loaded.navigation.then(function(toc){
+               chapters = parseChapters(toc)
+               window.flutter_inappwebview.callHandler('chapters');
+             });
 
             rendition.on("rendered", () => safeCallHandler('rendered'));
 
