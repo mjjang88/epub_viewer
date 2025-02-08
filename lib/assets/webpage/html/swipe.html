@@ -78,9 +78,17 @@
         viewer.style.height = window.innerHeight + "px";
 
         try {
-            console.log("Loading EPUB from:", filePath);
+            console.log("Checking EPUB file:", filePath);
 
-            // ✅ 파일을 URL로 변환하여 EPUB 로드 (스트리밍 방식)
+            // ✅ EPUB 파일이 실제로 존재하는지 확인
+            let response = await fetch(filePath);
+            if (!response.ok) {
+                throw new Error(`EPUB file not found: ${filePath}`);
+            }
+
+            console.log("EPUB file found. Loading...");
+
+            // ✅ EPUB 파일을 열기
             book.open(filePath).then(() => {
                 console.log("EPUB file opened successfully.");
                 initRendition();
@@ -95,6 +103,8 @@
         }
 
         function initRendition() {
+            console.log("Initializing rendition...");
+
             rendition = book.renderTo("viewer", {
                 manager: manager,
                 flow: flow,
@@ -120,6 +130,8 @@
         }
 
         function addEventListeners() {
+            console.log("Adding event listeners...");
+
             rendition.on("rendered", () => safeCallHandler('rendered'));
 
             rendition.on("selected", (cfiRange, contents) => {
@@ -163,6 +175,8 @@
         }
 
         function applyStyles() {
+            console.log("Applying styles...");
+
             if (fontSize) {
                 setFontSize(fontSize);
             }
