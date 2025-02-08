@@ -69,7 +69,7 @@
 
     
 
-    function loadBook(data, cfi, manager, flow, spread, snap,allowScriptedContent,direction, useCustomSwipe,backgroundColor,foregroundColor,fontSize){
+    <!--function loadBook(data, cfi, manager, flow, spread, snap,allowScriptedContent,direction, useCustomSwipe,backgroundColor,foregroundColor,fontSize){
       var viewportHeight = window.innerHeight;
       document.getElementById('viewer').style.height = viewportHeight;
       var uint8Array = new Uint8Array(data)
@@ -178,6 +178,125 @@
           rendition.themes.select("dark");
         }
 
+    }-->
+
+    async function loadBook(filePath, cfi, manager, flow, spread, snap, allowScriptedContent, direction, useCustomSwipe, backgroundColor, foregroundColor, fontSize) {
+        var viewer = document.getElementById('viewer');
+        if (!viewer) {
+            console.error("Viewer element not found.");
+            return;
+        }
+
+        viewer.style.height = window.innerHeight + "px";
+
+        try {
+            console.log("Loading EPUB from:", filePath);
+
+            // ✅ 파일을 URL로 변환하여 EPUB 로드 (스트리밍 방식)
+            book.open(filePath).then(() => {
+                console.log("EPUB file opened successfully.");
+                initRendition();
+            }).catch(error => {
+                console.error("Error opening EPUB file:", error);
+                window.flutter_inappwebview.callHandler('displayError', error.message);
+            });
+
+        } catch (error) {
+            console.error("Failed to initialize EPUB book:", error);
+            window.flutter_inappwebview.callHandler('displayError', error.message);
+        }
+
+        function initRendition() {
+            rendition = book.renderTo("viewer", {
+                manager: manager,
+                flow: flow,
+                spread: spread,
+                width: "100vw",
+                height: "100vh",
+                snap: snap && !useCustomSwipe,
+                allowScriptedContent: allowScriptedContent,
+                defaultDirection: direction
+            });
+
+            (cfi ? rendition.display(cfi) : rendition.display()).then(() => {
+                console.log("EPUB displayed.");
+                safeCallHandler('displayed');
+            }).catch(error => {
+                console.error("Display error:", error);
+                safeCallHandler('displayError', error.message);
+            });
+
+            // 이벤트 리스너 등록
+            addEventListeners();
+            applyStyles();
+        }
+
+        function addEventListeners() {
+            rendition.on("rendered", () => safeCallHandler('rendered'));
+
+            rendition.on("selected", (cfiRange, contents) => {
+                book.getRange(cfiRange).then(range => {
+                    safeCallHandler('selection', cfiRange.toString(), range.toString());
+                }).catch(error => console.error("Error getting selected range:", error));
+            });
+
+            rendition.on("relocated", location => {
+                let progress = location.start.percentage || 0;
+                let locationData = {
+                    startCfi: location.start.cfi,
+                    endCfi: location.end.cfi,
+                    progress: progress
+                };
+                safeCallHandler('relocated', locationData);
+            });
+
+            rendition.on("displayError", e => {
+                console.error("Display Error:", e);
+                safeCallHandler('displayError', e.message);
+            });
+
+            rendition.on("markClicked", cfiRange => {
+                safeCallHandler('markClicked', cfiRange.toString());
+            });
+
+            // Custom Swipe Detection
+            rendition.hooks.content.register(contents => {
+                if (useCustomSwipe) {
+                    let el = contents.document.documentElement;
+                    if (el) {
+                        detectClickSides(el, (el, direction) => {
+                            if (direction === 'prev') rendition.prev();
+                            if (direction === 'next') rendition.next();
+                            if (direction === 'menu') safeCallHandler('centerClicked');
+                        });
+                    }
+                }
+            });
+        }
+
+        function applyStyles() {
+            if (fontSize) {
+                setFontSize(fontSize);
+            }
+
+            if (backgroundColor && foregroundColor) {
+                console.log("Applying theme:", backgroundColor, foregroundColor);
+                rendition.themes.register("custom", { "body": { "background": backgroundColor, "color": foregroundColor } });
+                rendition.themes.select("custom");
+            }
+        }
+
+        function safeCallHandler(handler, ...args) {
+            try {
+                if (window.flutter_inappwebview && window.flutter_inappwebview.callHandler) {
+                    window.flutter_inappwebview.callHandler(handler, ...args);
+                } else {
+                    console.warn(`Handler '${handler}' is not available.`);
+                }
+            } catch (error) {
+                console.error(`Error calling handler '${handler}':`, error);
+            }
+        }
     }
 
     window.flutter_inappwebview.callHandler('readyToLoad');
