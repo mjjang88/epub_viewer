@@ -241,8 +241,8 @@ class _EpubViewerState extends State<EpubViewer> {
         ..allowsInlineMediaPlayback = true
         ..clearCache = true
         ..javaScriptEnabled = true
-        ..allowUniversalAccessFromFileURLs = true // ✅ 추가
-        ..allowFileAccessFromFileURLs = true, // ✅ 추가
+        ..allowUniversalAccessFromFileURLs = true
+        ..allowFileAccessFromFileURLs = true,
 
       // pullToRefreshController: pullToRefreshController,
       onWebViewCreated: (controller) async {

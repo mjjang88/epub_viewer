@@ -124,6 +124,8 @@
                 safeCallHandler('displayError', error.message);
             });
 
+            window.flutter_inappwebview.callHandler('chapters');
+
             // 이벤트 리스너 등록
             addEventListeners();
             applyStyles();
