@@ -12,7 +12,10 @@ dependencies:
     sdk: flutter
   flutter_inappwebview: ^6.0.0
   http: ^1.2.2
-  json_annotation: ^4.8.0
+  json_annotation: ^4.9.0
+  path_provider: ^2.1.5
+  shelf: ^1.4.1
+  shelf_static: ^1.1.1
 
 platforms:
   android:

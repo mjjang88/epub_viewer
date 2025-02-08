@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_epub_viewer/src/utils.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shelf/shelf_io.dart' as shelf_io;
+import 'package:shelf_static/shelf_static.dart';
 
 class EpubViewer extends StatefulWidget {
   const EpubViewer({
@@ -199,10 +201,11 @@ class _EpubViewerState extends State<EpubViewer> {
         widget.displaySettings?.theme?.foregroundColor?.toHex();
 
     final path = await saveEpubToAppStorage(data, 'book.epub');
+    await startLocalServer(path);
 
     webViewController?.evaluateJavascript(
         source:
-            'loadBook("$path", "$cfi", "$manager", "$flow", "$spread", $snap, $allowScripted, "$direction", $useCustomSwipe, "$backgroundColor", "$foregroundColor", "$fontSize")');
+            'loadBook("http://localhost:8080/book.epub", "$cfi", "$manager", "$flow", "$spread", $snap, $allowScripted, "$direction", $useCustomSwipe, "$backgroundColor", "$foregroundColor", "$fontSize")');
   }
 
   Future<String> saveEpubToAppStorage(Uint8List epubData, String fileName) async {
@@ -211,6 +214,14 @@ class _EpubViewerState extends State<EpubViewer> {
     final file = File(filePath);
     await file.writeAsBytes(epubData);
     return filePath; // ✅ WebView에서 접근 가능
+  }
+
+  Future<void> startLocalServer(String filePath) async {
+    var directory = await getApplicationDocumentsDirectory();
+    var handler = createStaticHandler(directory.path, listDirectories: false);
+    var server = await shelf_io.serve(handler, 'localhost', 8080);
+
+    print('✅ Local EPUB server running at http://${server.address.host}:${server.port}');
   }
 
   @override
