@@ -228,7 +228,9 @@ class _EpubViewerState extends State<EpubViewer> {
         ..allowingReadAccessTo = WebUri.uri(Uri.parse("file:///"))
         ..allowFileAccess = true
         ..allowContentAccess = true
-        ..allowsInlineMediaPlayback = true,
+        ..allowsInlineMediaPlayback = true
+        ..clearCache = true
+        ..javaScriptEnabled = true,
 
       // pullToRefreshController: pullToRefreshController,
       onWebViewCreated: (controller) async {
@@ -262,6 +264,7 @@ class _EpubViewerState extends State<EpubViewer> {
       },
       onLoadStop: (controller, url) async {
         addJavaScriptHandlers();
+        await controller.evaluateJavascript(source: "document.body.style.visibility='visible';");
       },
       onReceivedError: (controller, request, error) {},
 
