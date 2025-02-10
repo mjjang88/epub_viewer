@@ -238,11 +238,10 @@ class _EpubViewerState extends State<EpubViewer> {
         ..disableVerticalScroll = widget.displaySettings?.snap ?? false
         ..allowFileAccess = true
         ..allowContentAccess = true
-        ..allowsInlineMediaPlayback = true
         ..clearCache = true
-        ..javaScriptEnabled = true
         ..allowUniversalAccessFromFileURLs = true
-        ..allowFileAccessFromFileURLs = true,
+        ..allowFileAccessFromFileURLs = true
+        ..allowingReadAccessTo =  WebUri("file:///"),
 
       // pullToRefreshController: pullToRefreshController,
       onWebViewCreated: (controller) async {

@@ -94,12 +94,12 @@
                 initRendition();
             }).catch(error => {
                 console.error("Error opening EPUB file:", error);
-                window.flutter_inappwebview.callHandler('displayError', error.message);
+                window.flutter_inappwebview.callHandler('displayError', error.message || "null");
             });
 
         } catch (error) {
             console.error("Failed to initialize EPUB book:", error);
-            window.flutter_inappwebview.callHandler('displayError', error.message);
+            window.flutter_inappwebview.callHandler('displayError', error.message || "null");
         }
 
         function initRendition() {
@@ -134,7 +134,7 @@
 
             book.loaded.navigation.then(function(toc){
                chapters = parseChapters(toc)
-               window.flutter_inappwebview.callHandler('chapters');
+               window.flutter_inappwebview.callHandler('chapters', JSON.stringify(chapters));
              });
 
             rendition.on("rendered", () => safeCallHandler('rendered'));
@@ -196,7 +196,7 @@
         function safeCallHandler(handler, ...args) {
             try {
                 if (window.flutter_inappwebview && window.flutter_inappwebview.callHandler) {
-                    window.flutter_inappwebview.callHandler(handler, ...args);
+                    window.flutter_inappwebview.callHandler(handler, ...args || "null");
                 } else {
                     console.warn(`Handler '${handler}' is not available.`);
                 }
@@ -206,7 +206,7 @@
         }
     }
 
-    window.flutter_inappwebview.callHandler('readyToLoad');
+    window.flutter_inappwebview.callHandler('readyToLoad' || "null");
 
     
     //move to next page
@@ -258,7 +258,7 @@
     function searchInBook(query){
       search(query).then(function (data){
         var args = [data]
-        window.flutter_inappwebview.callHandler('search', ...args);
+        window.flutter_inappwebview.callHandler('search', ...args || "null");
       })
     }
 
@@ -340,7 +340,7 @@
       book.getRange(cfiRange).then(function (range){
         var text = range.toString();
         var args = [text, cfiRange]
-        window.flutter_inappwebview.callHandler('epubText', ...args);
+        window.flutter_inappwebview.callHandler('epubText', ...args || "null");
       })
     }
 
@@ -350,7 +350,7 @@
       book.getRange(cfiRange).then(function (range){
         var text = range.toString();
         var args = [text,cfiRange]
-        window.flutter_inappwebview.callHandler('epubText', ...args);
+        window.flutter_inappwebview.callHandler('epubText', ...args || "null");
       })
     }
 
