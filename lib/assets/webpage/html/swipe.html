@@ -134,7 +134,7 @@
 
             book.loaded.navigation.then(function(toc){
                chapters = parseChapters(toc)
-               window.flutter_inappwebview.callHandler('chapters', JSON.stringify(chapters));
+               window.flutter_inappwebview.callHandler('chapters', JSON.stringify(chapters) || "null");
              });
 
             rendition.on("rendered", () => safeCallHandler('rendered'));
@@ -206,7 +206,7 @@
         }
     }
 
-    window.flutter_inappwebview.callHandler('readyToLoad' || "null");
+    window.flutter_inappwebview.callHandler('readyToLoad', "OK" || "null");
 
     
     //move to next page
