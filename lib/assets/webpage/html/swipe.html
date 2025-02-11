@@ -134,7 +134,7 @@
 
             book.loaded.navigation.then(function(toc){
                chapters = parseChapters(toc)
-               window.flutter_inappwebview.callHandler('chapters', JSON.stringify(chapters) || "null");
+               window.flutter_inappwebview.callHandler('chapters', "success");
              });
 
             rendition.on("rendered", () => safeCallHandler('rendered'));
@@ -226,7 +226,7 @@
     
     //get all chapters
     function getChapters(){
-      return chapters;
+      return JSON.stringify(chapters);
     }
 
 

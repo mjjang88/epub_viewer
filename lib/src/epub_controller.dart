@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_epub_viewer/src/helper.dart';
 import 'package:flutter_epub_viewer/src/utils.dart';
@@ -62,8 +63,11 @@ class EpubController {
     checkEpubLoaded();
     final result =
         await webViewController!.evaluateJavascript(source: 'getChapters()');
+
+    List<dynamic> jsonList = jsonDecode(result as String);
+
     _chapters =
-        List<EpubChapter>.from(result.map((e) {
+        List<EpubChapter>.from(jsonList.map((e) {
           if (e is Map<Object?, Object?>) {
             Map<String, dynamic> parsedData = convertToMap(e);
             return EpubChapter.fromJson(parsedData);
