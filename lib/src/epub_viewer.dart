@@ -241,7 +241,7 @@ class _EpubViewerState extends State<EpubViewer> {
         ..clearCache = true
         ..allowUniversalAccessFromFileURLs = true
         ..allowFileAccessFromFileURLs = true
-        ..allowingReadAccessTo =  WebUri("file:///"),
+        ..allowingReadAccessTo = WebUri.uri(Uri.parse("http://localhost:8080")),
 
       // pullToRefreshController: pullToRefreshController,
       onWebViewCreated: (controller) async {
