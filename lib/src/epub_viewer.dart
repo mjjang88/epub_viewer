@@ -250,6 +250,13 @@ class _EpubViewerState extends State<EpubViewer> {
         widget.epubController.setWebViewController(controller);
         // await loadBook();
         addJavaScriptHandlers();
+        await controller.evaluateJavascript(
+          source: """
+            document.addEventListener("touchstart", function(event) {
+              event.preventDefault();
+            }, { passive: false });
+            """,
+        );
       },
       onLoadStart: (controller, url) {},
       onPermissionRequest: (controller, request) async {
