@@ -25,8 +25,19 @@ class EpubChapter {
     required this.id,
     required this.subitems,
   });
-  factory EpubChapter.fromJson(Map<String, dynamic> json) =>
-      _$EpubChapterFromJson(json);
+
+  /// ✅ `fromJson()`에서 타입 변환 처리
+  factory EpubChapter.fromJson(Map<String, dynamic> json) => EpubChapter(
+    title: json['title'] as String? ?? '',
+    href: json['href'] as String? ?? '',
+    id: json['id'] as String? ?? '',
+    subitems: (json['subitems'] as List<dynamic>?)
+        ?.map((e) => EpubChapter.fromJson(Map<String, dynamic>.from(e as Map)))
+        .toList() ??
+        [],
+  );
+
+  /// ✅ `toJson()` 메서드 수정 (`explicitToJson` 옵션으로 자동 변환)
   Map<String, dynamic> toJson() => _$EpubChapterToJson(this);
 }
 
