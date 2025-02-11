@@ -87,6 +87,7 @@ class _EpubViewerState extends State<EpubViewer> {
       iframeAllowFullscreen: true,
       allowsLinkPreview: false,
       verticalScrollBarEnabled: false,
+      allowsBackForwardNavigationGestures: false,
       // disableVerticalScroll: true,
       selectionGranularity: SelectionGranularity.CHARACTER);
 
@@ -288,10 +289,10 @@ class _EpubViewerState extends State<EpubViewer> {
         }
       },
       gestureRecognizers: {
-        Factory<VerticalDragGestureRecognizer>(
+        /*Factory<VerticalDragGestureRecognizer>(
             () => VerticalDragGestureRecognizer()),
         Factory<LongPressGestureRecognizer>(() => LongPressGestureRecognizer(
-            duration: const Duration(milliseconds: 30))),
+            duration: const Duration(milliseconds: 30))),*/
       },
     );
   }
